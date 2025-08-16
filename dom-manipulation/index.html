@@ -1,38 +1,132 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dynamic Quote Generator</title>
-  <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dynamic Quote Generator — Sync & Conflicts</title>
+  <style>
+    body { font-family: system-ui, Arial, sans-serif; margin: 24px; }
+    h1 { margin-bottom: 8px; }
+    #quoteDisplay { padding: 12px 14px; background: #f7f7f9; border: 1px solid #eaeaea; border-radius: 8px; min-height: 48px; }
+    .row { display: flex; gap: 8px; flex-wrap: wrap; margin: 10px 0; }
+    input, select, button { padding: 10px; border-radius: 6px; border: 1px solid #ccc; }
+    button { cursor: pointer; }
+    .section { margin-top: 14px; }
+    .label { font-weight: 600; margin-right: 6px; }
+    #syncStatus { font-size: 0.95rem; opacity: 0.85; margin-top: 6px; }
+    #conflictArea { margin-top: 10px; display: none; }
+    #conflictArea ul { margin: 6px 0 0 18px; }
+    .notice { background: #fff7e6; border: 1px solid #ffe8b0; padding: 10px; border-radius: 8px; }
+  </style>
 </head>
 <body>
   <h1>Dynamic Quote Generator</h1>
 
   <!-- Quote Display -->
-  <div id="quoteDisplay">Click the button to see a random quote!</div>
-  <button onclick="generateQuote()">New Quote</button>
+  <div id="quoteDisplay">Click “New Quote” to get started.</div>
+  <div class="row">
+    <button id="btnNewQuote" onclick="generateQuote()">New Quote</button>
+    <button id="btnSyncNow" onclick="syncNow()">Sync Now</button>
+  </div>
 
   <!-- Category Filter -->
-  <div class="filter-section">
-    <label for="categoryFilter">Filter by Category:</label>
+  <div class="section">
+    <span class="label">Filter by Category:</span>
     <select id="categoryFilter" onchange="filterQuotes()">
       <option value="all">All Categories</option>
-      <!-- Categories will be dynamically populated -->
+      <!-- populated dynamically -->
     </select>
+    <div id="syncStatus">Not synced yet.</div>
   </div>
 
-  <!-- Add Quote Section -->
-  <div class="add-quote-section">
-    <input type="text" id="newQuote" placeholder="Enter a new quote">
-    <input type="text" id="newCategory" placeholder="Enter a category">
-    <button onclick="addQuote()">Add Quote</button>
+  <!-- Add Quote -->
+  <div class="section">
+    <div class="row">
+      <input type="text" id="newQuote" placeholder="Enter a new quote" />
+      <input type="text" id="newCategory" placeholder="Enter a category" />
+      <button onclick="addQuote()">Add Quote</button>
+    </div>
   </div>
 
-  <!-- Import/Export Section -->
-  <div class="import-export-section">
-    <button onclick="exportToJsonFile()">Export Quotes (JSON)</button>
-    <input type="file" id="importFile" accept=".json" onchange="importFromJsonFile(event)" />
+  <!-- Import / Export -->
+  <div class="section">
+    <div class="row">
+      <button onclick="exportToJsonFile()">Export Quotes (JSON)</button>
+      <input type="file" id="importFile" accept=".json" onchange="importFromJsonFile(event)" />
+    </div>
+  </div>
+
+  <!-- Conflicts / Notifications -->
+  <div id="conflictArea" class="section notice">
+    <strong>Conflicts resolved (server wins):</strong>
+    <ul id="conflictList"></ul>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dynamic Quote Generator — Sync & Conflicts</title>
+  <style>
+    body { font-family: system-ui, Arial, sans-serif; margin: 24px; }
+    h1 { margin-bottom: 8px; }
+    #quoteDisplay { padding: 12px 14px; background: #f7f7f9; border: 1px solid #eaeaea; border-radius: 8px; min-height: 48px; }
+    .row { display: flex; gap: 8px; flex-wrap: wrap; margin: 10px 0; }
+    input, select, button { padding: 10px; border-radius: 6px; border: 1px solid #ccc; }
+    button { cursor: pointer; }
+    .section { margin-top: 14px; }
+    .label { font-weight: 600; margin-right: 6px; }
+    #syncStatus { font-size: 0.95rem; opacity: 0.85; margin-top: 6px; }
+    #conflictArea { margin-top: 10px; display: none; }
+    #conflictArea ul { margin: 6px 0 0 18px; }
+    .notice { background: #fff7e6; border: 1px solid #ffe8b0; padding: 10px; border-radius: 8px; }
+  </style>
+</head>
+<body>
+  <h1>Dynamic Quote Generator</h1>
+
+  <!-- Quote Display -->
+  <div id="quoteDisplay">Click “New Quote” to get started.</div>
+  <div class="row">
+    <button id="btnNewQuote" onclick="generateQuote()">New Quote</button>
+    <button id="btnSyncNow" onclick="syncNow()">Sync Now</button>
+  </div>
+
+  <!-- Category Filter -->
+  <div class="section">
+    <span class="label">Filter by Category:</span>
+    <select id="categoryFilter" onchange="filterQuotes()">
+      <option value="all">All Categories</option>
+      <!-- populated dynamically -->
+    </select>
+    <div id="syncStatus">Not synced yet.</div>
+  </div>
+
+  <!-- Add Quote -->
+  <div class="section">
+    <div class="row">
+      <input type="text" id="newQuote" placeholder="Enter a new quote" />
+      <input type="text" id="newCategory" placeholder="Enter a category" />
+      <button onclick="addQuote()">Add Quote</button>
+    </div>
+  </div>
+
+  <!-- Import / Export -->
+  <div class="section">
+    <div class="row">
+      <button onclick="exportToJsonFile()">Export Quotes (JSON)</button>
+      <input type="file" id="importFile" accept=".json" onchange="importFromJsonFile(event)" />
+    </div>
+  </div>
+
+  <!-- Conflicts / Notifications -->
+  <div id="conflictArea" class="section notice">
+    <strong>Conflicts resolved (server wins):</strong>
+    <ul id="conflictList"></ul>
   </div>
 
   <script src="script.js"></script>
