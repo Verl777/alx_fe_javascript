@@ -115,7 +115,7 @@ async function postQuoteToServer(quote) {
       body: JSON.stringify(quote),
       headers: { "Content-Type": "application/json" }
     });
-    showNotification("Quote synced with server!");
+    showNotification("Quotes synced with server!");
   } catch (err) {
     console.error("Error posting to server:", err);
   }
